@@ -1,4 +1,4 @@
-# Verbali dashboard
+# Verbali authentication
 
 ## Running project
 
