@@ -1,0 +1,28 @@
+[package]
+name = "verbali-authentication"
+version = "0.1.0"
+authors = ["Thomas <thomas.lesciellour@gmail.com>"]
+edition = "2021"
+
+[dependencies]
+dioxus = { version = "0.6.0", features = ["router", "fullstack"] }
+unic-langid = "0.9.5"
+dioxus-i18n = "0.4.3"
+
+[features]
+default = ["web"]
+web = ["dioxus/web"]
+desktop = ["dioxus/desktop"]
+mobile = ["dioxus/mobile"]
+
+[profile]
+
+[profile.wasm-dev]
+inherits = "dev"
+opt-level = 1
+
+[profile.server-dev]
+inherits = "dev"
+
+[profile.android-dev]
+inherits = "dev"

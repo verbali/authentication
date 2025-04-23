@@ -1,0 +1,10 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: dockerfiles/dev.dockerfile
+      network: host
+    volumes:
+      - .:/app
+    ports:
+      - "8081:8080"

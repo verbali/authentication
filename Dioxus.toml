@@ -1,0 +1,16 @@
+[application]
+asset_dir = "public"
+
+[web.app]
+title = "Verbali"
+
+[web.watcher]
+reload_html = true
+watch_path = ["src", "assets", "public"]
+
+[web.resource]
+style = []
+script = []
+
+[web.resource.dev]
+script = []
