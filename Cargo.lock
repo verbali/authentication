@@ -4633,6 +4633,15 @@ dependencies = [
  "dioxus",
  "dioxus-i18n",
  "unic-langid",
+ "verbali-design-system",
+]
+
+[[package]]
+name = "verbali-design-system"
+version = "0.1.0"
+source = "git+https://github.com/verbali/design-system.git?branch=main#52996498f217c19cd11880fb98ad8bf5b62fd028"
+dependencies = [
+ "dioxus",
 ]
 
 [[package]]

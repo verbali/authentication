@@ -1,6 +1,7 @@
 use dioxus::prelude::*;
 use dioxus_i18n::prelude::*;
 use unic_langid::langid;
+use verbali_design_system::assets::{DS_CSS, LOGO_SVG};
 
 use views::Authentication;
 
@@ -15,9 +16,7 @@ enum Route {
     Authentication { mode: String },
 }
 
-const FAVICON: Asset = asset!("/assets/logo.svg");
 const MAIN_CSS: Asset = asset!("/assets/style.css");
-const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
 fn main() {
     dioxus::launch(App);
@@ -39,9 +38,9 @@ fn App() -> Element {
     );
 
     rsx! {
-        document::Link { rel: "icon", href: FAVICON }
+        document::Link { rel: "icon", href: LOGO_SVG }
+        document::Link { rel: "stylesheet", href: DS_CSS }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
-        document::Link { rel: "stylesheet", href: TAILWIND_CSS }
 
         Router::<Route> {}
     }

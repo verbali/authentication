@@ -5,6 +5,7 @@ authors = ["Thomas <thomas.lesciellour@gmail.com>"]
 edition = "2021"
 
 [dependencies]
+verbali-design-system = { git = "https://github.com/verbali/design-system.git", branch = "main" }
 dioxus = { version = "0.6.0", features = ["router", "fullstack"] }
 unic-langid = "0.9.5"
 dioxus-i18n = "0.4.3"

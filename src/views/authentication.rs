@@ -1,10 +1,11 @@
-use crate::components::{
-    button::Button,
-    forms::{inputs::InputText, Panel},
-    layouts::Footer,
-};
+use crate::components::layouts::Footer;
+use crate::Route;
 use dioxus::prelude::*;
 use dioxus_i18n::tid;
+use verbali_design_system::components::{
+    cards::Panel,
+    forms::{Button, Input},
+};
 
 #[component]
 pub fn Authentication(mut mode: String) -> Element {
@@ -31,7 +32,7 @@ pub fn Authentication(mut mode: String) -> Element {
                     hidden_content: rsx!(
                         div {
                             class: "text-center",
-                            Button {
+                            Button<Route> {
                                 onclick: move |_| {
                                     *panel_show.write() = "signup".to_string();
                                 },
@@ -47,7 +48,7 @@ pub fn Authentication(mut mode: String) -> Element {
                             {tid!("signup")}
                         },
 
-                        InputText {
+                        Input {
                             class: "my-4",
                             label: tid!("email"),
                             placeholder: tid!("email.placeholder"),
@@ -55,7 +56,7 @@ pub fn Authentication(mut mode: String) -> Element {
                             required: true,
                         },
 
-                        InputText {
+                        Input {
                             class: "my-4",
                             label: tid!("password"),
                             placeholder: "······",
@@ -63,7 +64,7 @@ pub fn Authentication(mut mode: String) -> Element {
                             required: true,
                         },
 
-                        InputText {
+                        Input {
                             class: "my-4",
                             label: tid!("password.confirm"),
                             placeholder: "······",
@@ -73,7 +74,7 @@ pub fn Authentication(mut mode: String) -> Element {
 
                         div {
                             class: "text-center",
-                            Button {
+                            Button<Route> {
                                 label: tid!("signup")
                             }
                         }
@@ -87,7 +88,7 @@ pub fn Authentication(mut mode: String) -> Element {
                     hidden_content: rsx!(
                         div {
                             class: "text-center",
-                            Button {
+                            Button<Route> {
                                 onclick: move |_| {
                                     *panel_show.write() = "login".to_string();
                                 },
@@ -103,7 +104,7 @@ pub fn Authentication(mut mode: String) -> Element {
                             {tid!("login")}
                         },
 
-                        InputText {
+                        Input {
                             class: "my-4",
                             label: tid!("email"),
                             placeholder: tid!("email.placeholder"),
@@ -111,7 +112,7 @@ pub fn Authentication(mut mode: String) -> Element {
                             required: true,
                         },
 
-                        InputText {
+                        Input {
                             class: "my-4",
                             label: tid!("password"),
                             placeholder: "······",
@@ -121,7 +122,7 @@ pub fn Authentication(mut mode: String) -> Element {
 
                         div {
                             class: "text-center",
-                            Button {
+                            Button<Route> {
                                 label: tid!("login")
                             }
                         }

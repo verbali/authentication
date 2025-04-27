@@ -14,7 +14,7 @@ docker compose exec app npm install
 
 3. Watch and compile tailwindcss
 ```bash
-docker compose exec app npx tailwindcss -i ./input.css -o ./assets/tailwind.css --watch
+docker compose exec app npx tailwindcss -i ./assets/input.css -o ./assets/style.css --watch
 ```
 
 4. Run DX server
