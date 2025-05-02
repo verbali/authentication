@@ -1,9 +1,11 @@
+use std::collections::HashMap;
+
 use crate::components::layouts::Footer;
 use crate::Route;
 use dioxus::prelude::*;
 use dioxus_i18n::tid;
 use verbali_design_system::components::{
-    cards::Panel,
+    cards::SwitchPanel,
     forms::{Button, Input},
 };
 
@@ -13,6 +15,8 @@ pub fn Authentication(mut mode: String) -> Element {
         mode = "login".to_string();
     }
     let mut panel_show = use_signal(|| mode.clone());
+    let mut signup_values = use_signal(HashMap::new);
+    let mut login_values = use_signal(HashMap::new);
 
     let panel_classes = "flex flex-col justify-center p-16";
     let hidden_classes = "flex-1 bg-blue-600";
@@ -25,7 +29,7 @@ pub fn Authentication(mut mode: String) -> Element {
             div {
                 class: "flex items-stretch w-full max-w-4xl h-[550px] bg-white dark:bg-slate-800 shadow-xl rounded-lg overflow-hidden",
 
-                Panel {
+                SwitchPanel {
                     show: *panel_show.read() == "signup".to_string(),
 
                     hidden_classes: "{panel_classes} {hidden_classes}",
@@ -48,40 +52,66 @@ pub fn Authentication(mut mode: String) -> Element {
                             {tid!("signup")}
                         },
 
-                        Input {
-                            class: "my-4",
-                            label: tid!("email"),
-                            placeholder: tid!("email.placeholder"),
-                            type: "email",
-                            required: true,
-                        },
+                        form {
+                            oninput: move |event| {
+                                signup_values.set(event.data().values());
+                            },
 
-                        Input {
-                            class: "my-4",
-                            label: tid!("password"),
-                            placeholder: "······",
-                            type: "password",
-                            required: true,
-                        },
+                            onsubmit: move |_| {
+                                spawn(async move {
+                                    let email = signup_values.read().get("email").unwrap().as_value();
+                                    let password = signup_values.read().get("password").unwrap().as_value();
+                                    let confirm = signup_values.read().get("confirm").unwrap().as_value();
+                                    let resp = signup(email, password, confirm)
+                                        .await;
 
-                        Input {
-                            class: "my-4",
-                            label: tid!("password.confirm"),
-                            placeholder: "······",
-                            type: "password",
-                            required: true,
-                        },
+                                    println!("Signup response: {:?}", resp);
+                                });
+                            },
 
-                        div {
-                            class: "text-center",
-                            Button<Route> {
-                                label: tid!("signup")
+                            p {
+                                "Hashmap: {signup_values:?}"
+                            }
+
+                            Input {
+                                class: "my-4",
+                                name: "email",
+                                label: tid!("email"),
+                                placeholder: tid!("email.placeholder"),
+                                type: "email",
+                                required: true,
+                            },
+
+                            Input {
+                                class: "my-4",
+                                name: "password",
+                                label: tid!("password"),
+                                placeholder: "······",
+                                type: "password",
+                                required: true,
+                            },
+
+                            Input {
+                                class: "my-4",
+                                name: "confirm",
+                                label: tid!("password.confirm"),
+                                placeholder: "······",
+                                type: "password",
+                                required: true,
+                            },
+
+                            div {
+                                class: "text-center",
+                                Button<Route> {
+                                    label: tid!("signup"),
+                                    type: "submit"
+                                }
                             }
                         }
                     ),
                 },
 
-                Panel {
+                SwitchPanel {
                     show: *panel_show.read() == "login".to_string(),
 
                     hidden_classes: "{panel_classes} {hidden_classes}",
@@ -104,32 +134,69 @@ pub fn Authentication(mut mode: String) -> Element {
                             {tid!("login")}
                         },
 
-                        Input {
-                            class: "my-4",
-                            label: tid!("email"),
-                            placeholder: tid!("email.placeholder"),
-                            type: "email",
-                            required: true,
-                        },
+                        form {
+                            oninput: move |event| {
+                                login_values.set(event.data().values());
+                            },
 
-                        Input {
-                            class: "my-4",
-                            label: tid!("password"),
-                            placeholder: "······",
-                            type: "password",
-                            required: true,
-                        }
+                            onsubmit: move |_| {
+                                spawn(async move {
+                                    let email = login_values.read().get("email").unwrap().as_value();
+                                    let password = login_values.read().get("password").unwrap().as_value();
+                                    let resp = login(email, password)
+                                        .await;
 
-                        div {
-                            class: "text-center",
-                            Button<Route> {
-                                label: tid!("login")
+                                    println!("Login response: {:?}", resp);
+                                });
+                            },
+
+                            p {
+                                "Hashmap: {login_values:?}"
+                            }
+
+                            Input {
+                                class: "my-4",
+                                name: "email",
+                                label: tid!("email"),
+                                placeholder: tid!("email.placeholder"),
+                                type: "email",
+                                required: true,
+                            },
+
+                            Input {
+                                class: "my-4",
+                                name: "password",
+                                label: tid!("password"),
+                                placeholder: "······",
+                                type: "password",
+                                required: true,
+                            }
+
+                            div {
+                                class: "text-center",
+                                Button<Route> {
+                                    label: tid!("login"),
+                                    type: "submit",
+                                }
                             }
                         }
+
                     ),
                 }
             }
         }
         Footer {}
     }
+}
+
+#[server]
+async fn login(email: String, password: String) -> Result<(), ServerFnError> {
+    // TODO: Implement login logic
+    Ok(())
+}
+
+#[server]
+async fn signup(email: String, password: String, confirm: String) -> Result<(), ServerFnError> {
+    // TODO: Implement signup logic
+    Ok(())
 }
