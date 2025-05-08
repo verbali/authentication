@@ -69,10 +69,6 @@ pub fn Authentication(mut mode: String) -> Element {
                                 });
                             },
 
-                            p {
-                                "Hashmap: {signup_values:?}"
-                            }
-
                             Input {
                                 class: "my-4",
                                 name: "email",
@@ -149,10 +145,6 @@ pub fn Authentication(mut mode: String) -> Element {
                                     println!("Login response: {:?}", resp);
                                 });
                             },
-
-                            p {
-                                "Hashmap: {login_values:?}"
-                            }
 
                             Input {
                                 class: "my-4",
