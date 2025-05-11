@@ -37,6 +37,11 @@ Create migration
 docker compose exec app diesel migration generate <MIGRATION_FILENAME>
 ```
 
+First initialisation of database
+```bash
+docker compose exec app diesel database setup
+```
+
 Run all migrations needed
 ```bash
 docker compose exec app diesel migration run

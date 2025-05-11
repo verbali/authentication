@@ -1,13 +1,15 @@
-use std::collections::HashMap;
-
 use crate::components::layouts::Footer;
 use crate::Route;
 use dioxus::prelude::*;
 use dioxus_i18n::tid;
+use std::collections::HashMap;
 use verbali_design_system::components::{
     cards::SwitchPanel,
     forms::{Button, Input},
 };
+
+#[cfg(feature = "server")]
+use crate::database::models::{InsertableUser, User};
 
 #[component]
 pub fn Authentication(mut mode: String) -> Element {
@@ -62,10 +64,8 @@ pub fn Authentication(mut mode: String) -> Element {
                                     let email = signup_values.read().get("email").unwrap().as_value();
                                     let password = signup_values.read().get("password").unwrap().as_value();
                                     let confirm = signup_values.read().get("confirm").unwrap().as_value();
-                                    let resp = signup(email, password, confirm)
+                                    let _ = signup(email, password, confirm)
                                         .await;
-
-                                    println!("Signup response: {:?}", resp);
                                 });
                             },
 
@@ -139,10 +139,8 @@ pub fn Authentication(mut mode: String) -> Element {
                                 spawn(async move {
                                     let email = login_values.read().get("email").unwrap().as_value();
                                     let password = login_values.read().get("password").unwrap().as_value();
-                                    let resp = login(email, password)
+                                    let _ = login(email, password)
                                         .await;
-
-                                    println!("Login response: {:?}", resp);
                                 });
                             },
 
@@ -183,12 +181,26 @@ pub fn Authentication(mut mode: String) -> Element {
 
 #[server]
 async fn login(email: String, password: String) -> Result<(), ServerFnError> {
-    // TODO: Implement login logic
+    let user = User::find(email, password).unwrap();
+    println!("{:#?}", user);
     Ok(())
 }
 
 #[server]
-async fn signup(email: String, password: String, confirm: String) -> Result<(), ServerFnError> {
-    // TODO: Implement signup logic
-    Ok(())
+async fn signup(email: String, password: String, confirm: String) -> Result<String, ServerFnError> {
+    if (password != confirm) {
+        return Err(ServerFnError::ServerError(
+            "Both password must be same".to_string(),
+        ));
+    }
+
+    let user = User::create(InsertableUser { email, password }).unwrap();
+    let mut data = json::JsonValue::new_object();
+
+    println!("{:#?}", user);
+
+    data.insert("uuid", user.uuid);
+    data.insert("email", user.email);
+
+    Ok(data.dump())
 }

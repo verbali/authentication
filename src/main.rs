@@ -11,6 +11,8 @@ mod views;
 #[cfg(feature = "server")]
 mod database;
 #[cfg(feature = "server")]
+mod helpers;
+#[cfg(feature = "server")]
 mod schema;
 
 #[derive(Debug, Clone, Routable, PartialEq)]

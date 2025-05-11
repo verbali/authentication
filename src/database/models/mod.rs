@@ -1,2 +1,2 @@
 mod user;
-pub use user::{NewUser, User};
+pub use user::{InsertableUser, User};
