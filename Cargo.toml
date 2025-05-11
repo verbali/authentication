@@ -6,15 +6,18 @@ edition = "2021"
 
 [dependencies]
 verbali-design-system = { git = "https://github.com/verbali/design-system.git", branch = "main" }
+diesel = { version = "2.2.0", optional = true, features = ["postgres"] }
 dioxus = { version = "0.6.0", features = ["router", "fullstack"] }
 unic-langid = "0.9.5"
 dioxus-i18n = "0.4.3"
+dotenvy = "0.15"
+uuid = { version = "1.16.0", optional = true, features = ["v4"] }
+json = "0.12.4"
 
 [features]
 default = ["web"]
 web = ["dioxus/web"]
-desktop = ["dioxus/desktop"]
-mobile = ["dioxus/mobile"]
+server = ["dioxus/server", "dep:diesel", "dep:uuid"]
 
 [profile]
 

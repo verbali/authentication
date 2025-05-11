@@ -4,6 +4,9 @@ FROM rust:1.86.0
 RUN curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
 RUN cargo binstall dioxus-cli
 
+# Install diesel-cli
+RUN cargo binstall diesel_cli
+
 # Install node & npm
 RUN apt-get update && apt-get install -y npm
 

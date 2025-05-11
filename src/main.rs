@@ -8,6 +8,11 @@ use views::Authentication;
 mod components;
 mod views;
 
+#[cfg(feature = "server")]
+mod database;
+#[cfg(feature = "server")]
+mod schema;
+
 #[derive(Debug, Clone, Routable, PartialEq)]
 #[rustfmt::skip]
 enum Route {
@@ -16,11 +21,11 @@ enum Route {
     Authentication { mode: String },
 }
 
-const MAIN_CSS: Asset = asset!("/assets/style.css");
-
 fn main() {
     dioxus::launch(App);
 }
+
+const MAIN_CSS: Asset = asset!("/assets/style.css");
 
 #[component]
 fn App() -> Element {
