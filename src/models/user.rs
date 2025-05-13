@@ -1,4 +1,4 @@
-use crate::{database::database, helpers::hash};
+use crate::helpers::{database, hash};
 use diesel::prelude::*;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;

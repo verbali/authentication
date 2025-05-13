@@ -6,12 +6,11 @@ use verbali_design_system::assets::{DS_CSS, LOGO_SVG};
 use views::Authentication;
 
 mod components;
+mod helpers;
 mod views;
 
 #[cfg(feature = "server")]
-mod database;
-#[cfg(feature = "server")]
-mod helpers;
+mod models;
 #[cfg(feature = "server")]
 mod schema;
 

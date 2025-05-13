@@ -9,7 +9,7 @@ use verbali_design_system::components::{
 };
 
 #[cfg(feature = "server")]
-use crate::database::models::{InsertableUser, User};
+use crate::models::{InsertableUser, User};
 
 #[component]
 pub fn Authentication(mut mode: String) -> Element {
