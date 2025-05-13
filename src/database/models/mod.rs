@@ -1,2 +1,2 @@
 mod user;
-pub use user::{InsertableUser, User};
+pub use user::{InsertableUser, PublicUser, User};

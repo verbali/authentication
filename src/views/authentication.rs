@@ -60,13 +60,20 @@ pub fn Authentication(mut mode: String) -> Element {
                             },
 
                             onsubmit: move |_| {
-                                spawn(async move {
+                                async move {
                                     let email = signup_values.read().get("email").unwrap().as_value();
                                     let password = signup_values.read().get("password").unwrap().as_value();
                                     let confirm = signup_values.read().get("confirm").unwrap().as_value();
-                                    let _ = signup(email, password, confirm)
-                                        .await;
-                                });
+                                    match signup(email, password, confirm).await
+                                    {
+                                        Ok(user) => {
+                                            document::eval(&format!("console.log('{user}')"));
+                                        },
+                                        Err(err) => {
+                                            document::eval(&format!("console.log('{err}')"));
+                                        }
+                                    }
+                                }
                             },
 
                             Input {
@@ -136,12 +143,14 @@ pub fn Authentication(mut mode: String) -> Element {
                             },
 
                             onsubmit: move |_| {
-                                spawn(async move {
+                                async move {
                                     let email = login_values.read().get("email").unwrap().as_value();
                                     let password = login_values.read().get("password").unwrap().as_value();
-                                    let _ = login(email, password)
-                                        .await;
-                                });
+                                    if let Ok(user) = login(email, password).await
+                                    {
+                                        document::eval(&format!("console.log('{user}')"));
+                                    }
+                                }
                             },
 
                             Input {
@@ -179,28 +188,24 @@ pub fn Authentication(mut mode: String) -> Element {
     }
 }
 
-#[server]
-async fn login(email: String, password: String) -> Result<(), ServerFnError> {
-    let user = User::find(email, password).unwrap();
-    println!("{:#?}", user);
-    Ok(())
+#[server(prefix = "/api", endpoint = "login")]
+async fn login(email: String, password: String) -> Result<String, ServerFnError> {
+    match User::find(email, password) {
+        Ok(user) => Ok(serde_json::to_string(&user).unwrap()),
+        Err(_) => Err(ServerFnError::new("User not found")),
+    }
 }
 
-#[server]
+#[server(prefix = "/api", endpoint = "signup")]
 async fn signup(email: String, password: String, confirm: String) -> Result<String, ServerFnError> {
     if (password != confirm) {
-        return Err(ServerFnError::ServerError(
-            "Both password must be same".to_string(),
+        return Err(ServerFnError::new(
+            "Both password and confirmation must be same",
         ));
     }
 
-    let user = User::create(InsertableUser { email, password }).unwrap();
-    let mut data = json::JsonValue::new_object();
-
-    println!("{:#?}", user);
-
-    data.insert("uuid", user.uuid);
-    data.insert("email", user.email);
-
-    Ok(data.dump())
+    match User::create(InsertableUser { email, password }) {
+        Ok(user) => Ok(serde_json::to_string(&user).unwrap()),
+        Err(err) => Err(err.into()),
+    }
 }
